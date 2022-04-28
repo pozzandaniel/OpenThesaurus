@@ -6,12 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpenThesaurus</title>
     <script>
+       
+
         async function getSynonyms() {
             let url = 'https://www.openthesaurus.de/synonyme/search?q=test&format=application/json';
             let response = await fetch(url);
             let responseAsJSON = await response.json();
             let synsets = responseAsJSON['synsets'];
-            console.log(synsets);
+            renderSynonyms(synsets);
+        }
+
+        function renderSynonyms(synsets) {
+            for (let i = 0; i < synsets.length; i++) {
+                const synset = synsets[i];
+                let terms = synsets[i]['terms'];
+                let synonymsCont = document.getElementById('synonyms-container');
+                synonymsCont.innerHTML += `<h1>Synonyme-Set mit ID: ${synset['id']}</h2>`;
+                    for (let j = 0; j < terms.length; j++) {
+                        const term = terms[j]['term'];
+                        synonymsCont.innerHTML += `<p>${term}</p>`;
+                    }     
+            }
         }
 
         
@@ -19,6 +34,7 @@
 </head>
 <body>
     <button onclick="getSynonyms()">Get Synonymen</button>
+    <div id="synonyms-container"></div>
     
 </body>
 </html>
